@@ -17,6 +17,9 @@ import {
 
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
+import { signIn } from "@/app/_lib/auth-client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -33,16 +36,29 @@ export default function Home() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(true);
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    // Simular requisição (substitua pelo seu fluxo real)
     try {
-      console.log("Login submit =>", { ...values, remember });
-      await new Promise((r) => setTimeout(r, 700));
-      // aqui você chamaria sua API / better-auth
+      await signIn.email({
+        email: values.email,
+        password: values.password,
+        callbackURL: "/notae/sistema/inicio",
+        fetchOptions: {
+          onRequest: () => {
+            toast.loading("Realizando login...");
+          },
+          onSuccess: () => {
+            toast.success("Login realizado com sucesso!");
+            router.push("/autenticacao/entrar");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        },
+      })
     } catch (err) {
-      console.error(err);
+      toast.error("Erro ao realizar login" + err);
     }
   }
 

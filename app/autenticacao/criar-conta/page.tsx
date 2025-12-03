@@ -252,13 +252,12 @@ export default function SignUp() {
                             </Button>
                         </form>
                     </Form>
+                    <div className="pt-3 border-t border-slate-700 text-center">
+                        <p className="text-xs text-neutral-400">Já possui conta? <a href="/autenticacao/entrar" className="text-cyan-300 hover:underline">Entrar</a></p>
+                    </div>
                 </CardContent>
 
-                <CardFooter>
-                    <div className="flex justify-center w-full border-t py-4">
-                        <p className="text-center text-xs text-neutral-400">Protegido por <span className="text-cyan-300">better-auth</span></p>
-                    </div>
-                </CardFooter>
+
             </Card>
         </div>
     );
